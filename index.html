@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏵 My Best Pics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <p class="title">My Best Pics</p>
+        <div class="header__buttons">
+            <div class="user">You are not authorized...</div>
+            <button id="authorization">🕵</button>
+            <button id="quit">🕵↴</button>
+            <button id="settings">🛠</button>
+            <button id="reload">↺</button>
+        </div>
+    </header>
+
+    <div class="settings">
+        <div class="normalSearch">
+            <select name="TileAmount" id="Amount">
+                <option value="25">default</option>
+                <option value="0">0</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+                <option value="30">30</option>
+                <option value="35">35</option>
+                <option value="40">40</option>
+            </select>
+            <select name="" id="normalSelect">
+                <option value="">waifu</option>
+                <option value="">neco</option>
+                <option value="">shinobu</option>
+                <option value="">megumin</option>
+                <option value="">bully</option>
+                <option value="">cuddle</option>
+                <option value="">cry</option>
+                <option value="">hug</option>
+                <option value="">awooo</option>
+                <option value="">kiss</option>
+                <option value="">lick</option>
+                <option value="">pat</option>
+                <option value="">smug</option>
+                <option value="">bonk</option>
+                <option value="">yeet</option>
+                <option value="">blush</option>
+                <option value="">smile</option>
+                <option value="">wave</option>
+                <option value="">hieghfive</option>
+                <option value="">handhold</option>
+                <option value="">nom</option>
+                <option value="">bite</option>
+                <option value="">glomp</option>
+                <option value="">slap</option>
+                <option value="">kill</option>
+                <option value="">kick</option>
+                <option value="">happy</option>
+                <option value="">wink</option>
+                <option value="">poke</option>
+                <option value="">dance</option>
+                <option value="">cringe</option>
+            </select>
+            <button id="addTag">add</button>
+            <div class="selected">
+
+            </div>
+            <button id="search">search</button>
+        </div>
+        <div class="nsfmSearch">
+            <p>NSFM</p>
+            <select name="nsfmTileAmount" id="nsfmAmount">
+                <option value="25">default</option>
+                <option value="0">0</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+                <option value="30">30</option>
+                <option value="35">35</option>
+                <option value="40">40</option>
+            </select>
+            <select name="" id="nsfmSelect">
+                <option value="">waifu</option>
+                <option value="">neko</option>
+                <option value="">trap</option>
+                <option value="">blowjob</option>
+            </select>
+            <button id="nsfmAddTag">add</button>
+            <div class="nsfmSelected">
+
+            </div>
+            <button id="nsfmSearch">search</button>
+        </div>
+    </div>
+
+    <div class="content">
+
+    </div>
+
+    <div class="content" id="nsfmContent">
+
+    </div>
+
+    <div class="modal--BigPic">
+        <img src="" alt="" id="BigPic">
+    </div>
+
+    <div class="modal--BigPic" id="notAuthorized">
+        <p>You need to be authorized to use this function!</p>
+    </div>
+
+    <script>
+        // variables.. 
+
+        let body = document.querySelector('body');
+        let user = document.querySelector('.user');
+        let authorization = document.querySelector('#authorization');
+        let settings = document.querySelector('#settings');
+        let tile = document.querySelector('.tile');
+        let content = document.querySelector('.content');
+        let quit = document.querySelector('#quit');
+        let reload = document.querySelector('#reload');
+        let settingsDiv = document.querySelector('.settings');
+        let addTag = document.querySelector('#addTag');
+        let selectedTags = document.querySelector('.selected');
+        let select = document.querySelector('#normalSelect');
+        let search = document.querySelector('#search');
+
+        let nsfmSearch = document.querySelector('.nsfmSearch');
+        let nsfmSelect = document.querySelector('#nsfmSelect');
+        let nsfmAddTag = document.querySelector('#nsfmAddTag');
+        let nsfmSelectedDiv = document.querySelector('.nsfmSelected');
+        let nsfmSearchBtn = document.querySelector('#nsfmSearch');
+        let modalBigPic = document.querySelector('.modal--BigPic');
+        let imgBigPic = document.querySelector('#BigPic');
+
+        let amount = document.querySelector('#Amount');
+        let nsfmAmount = document.querySelector('#nsfmAmount');
+
+        let notAuthorized = document.querySelector('#notAuthorized');
+
+        let categories = ['waifu', 'neko', 'shinobu', 'megumin', 'bully', 'cuddle', 'cry', 'hug', 'awooo', 'kiss', 'lick', 'pat', 'smug', 'bonk',
+            'yeet', 'blush', 'smile', 'wave', 'highfive', 'handhold', 'nom', 'bite', 'glomp', 'slap', 'kill', 'kick', 'happy', 'wink', 'poke',
+            'dance', 'cringe'];
+        let nsfmCategories = ['waifu', 'neko', 'trap', 'blowjob'];
+        let tileCount = 0;
+        let nsfmTileCount = 0;
+        let nsfmCurrentColumn;
+        let currentColumn;
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        let selected = [];
+        let nsfmSelected = []; 
+    </script>
+
+    <script>
+        // events...
+
+        modalBigPic.addEventListener('click', () => {
+            modalBigPic.style.display = 'none';
+        });
+        notAuthorized.addEventListener('click', ()=>{
+            notAuthorized.style.display = 'none';
+        })    
+        authorization.addEventListener('click', () => {
+            if (isAuthorized()) {
+                location.href = 'Profile.html';
+            } else {
+                location.href = 'Login.html';
+            }
+        });
+        settings.addEventListener('click', () => {
+            if (isAuthorized()) {
+                if (settingsDiv.style.height == '100px') {
+                    settingsDiv.style.height = '0px';
+                } else {
+                    settingsDiv.style.height = '100px';
+                }
+            } else {
+                notAuthorized.style.display = 'flex';
+            }
+        });
+        quit.addEventListener('click', () => {
+            if (confirm('are you sure that you wanna quit your profile?')) {
+                currentUser = null;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                initProfile();
+            }
+        });
+        reload.addEventListener('click', () => {
+            reloadContent();
+            if(isAuthorized()){
+                reloadNsfmContent();
+            }
+        });
+        search.addEventListener('click', () => {
+            reloadContent(+amount.options[amount.selectedIndex].value);
+        });
+        nsfmSearchBtn.addEventListener('click', () => {
+            reloadNsfmContent(+nsfmAmount.options[nsfmAmount.selectedIndex].value);
+        });
+        addTag.addEventListener('click', () => {
+            let str = select.options[select.selectedIndex].textContent;
+            if (selected.includes(str)) return;
+            let tag = document.createElement('div');
+            tag.classList.add('tag');
+            let p = document.createElement('p');
+            p.textContent = str;
+            let btn = document.createElement('button');
+            btn.textContent = '⛌';
+            btn.addEventListener('click', () => {
+                tag.remove();
+                removeByData(selected, str);
+            });
+            tag.append(p);
+            tag.append(btn);
+            selectedTags.append(tag);
+            selected.push(str);
+        });
+
+        nsfmAddTag.addEventListener('click', () => {
+            let str = nsfmSelect.options[nsfmSelect.selectedIndex].textContent;
+            if (nsfmSelected.includes(str)) return;
+            let tag = document.createElement('div');
+            tag.classList.add('tag');
+            let p = document.createElement('p');
+            p.textContent = str;
+            let btn = document.createElement('button');
+            btn.textContent = '⛌';
+            btn.addEventListener('click', () => {
+                tag.remove();
+                removeByData(nsfmSelected, str);
+            });
+            tag.append(p);
+            tag.append(btn);
+            nsfmSelectedDiv.append(tag);
+            nsfmSelected.push(str);
+        })
+    </script>
+
+    <script>
+        // functions...
+        //  https://waifu.pics/docs
+
+        function removeByData(arr, d) {
+            for (let i = 0; i < arr.length; i++) {
+                if (arr[i] == d) {
+                    arr.splice(i, 1);
+                    return;
+                }
+            }
+        }
+        function postRandomPic(length = 25) {
+            for (let i = 0; i < length; i++) {
+                let random = Math.floor(Math.random() * 1000) % categories.length;
+                fetch(`https://api.waifu.pics/sfw/${categories[random]}`).then(res => res.json()).then(data => {
+                    AddTileToContent(data.url, length);
+                });
+            }
+        }
+        function postByTags(length = 25) {
+            for (let i = 0; i < length; i++) {
+                let random = Math.floor(Math.random() * 1000) % selected.length;
+                fetch(`https://api.waifu.pics/sfw/${selected[random]}`).then(res => res.json()).then(data => {
+                    AddTileToContent(data.url, length);
+                });
+            }
+        }
+
+        function postByNsfmTags(length = 25) {
+            for (let i = 0; i < length; i++) {
+                let random = Math.floor(Math.random() * 1000) % nsfmSelected.length;
+                fetch(`https://api.waifu.pics/nsfw/${nsfmSelected[random]}`).then(res => res.json()).then(data => {
+                    AddTileToNsfmContent(data.url, length);
+                });
+            }
+        }
+
+        function postRandomNsfmPic(length = 25) {
+            for (let i = 0; i < length; i++) {
+                let random = Math.floor(Math.random() * 1000) % nsfmCategories.length;
+                fetch(`https://api.waifu.pics/nsfw/${nsfmCategories[random]}`).then(res => res.json()).then(data => {
+                    AddTileToNsfmContent(data.url, length);
+                });
+            }
+        }
+
+        function AddTileToNsfmContent(url, length) {
+            if (nsfmTileCount % Math.floor(length / 5) == 0) {
+                nsfmCurrentColumn = document.createElement('div');
+                nsfmCurrentColumn.classList.add('content__nsfmColumn');
+                nsfmContent.append(nsfmCurrentColumn);
+            }
+            let tile = document.createElement('div');
+            tile.classList.add('tile');
+            let img = document.createElement('img');
+            let like = document.createElement('div');
+            like.classList.add('like');
+            let text = document.createElement('div');
+            text.classList.add('text');
+            let BigPic = document.createElement('button');
+            BigPic.addEventListener('click', () => {
+                imgBigPic.src = url;
+                modalBigPic.style.display = 'flex';
+            })
+            BigPic.textContent = '⇄';
+            img.src = url;
+            text.textContent = '🖤';
+            like.append(text);
+            like.append(BigPic);
+            tile.append(img);
+            tile.append(like);
+            text.addEventListener('click', () => {
+                if (text.textContent == '🖤') {
+                    text.textContent = '💖';
+                    if (isAuthorized()) {
+                        currentUser.nsfmLikes.push(url);
+                        updateUsers();
+                    }
+                } else {
+                    text.textContent = '🖤';
+                    if (isAuthorized()) {
+                        currentUser.nsfmLikes.splice(currentUser.nsfmLikes.indexOf(url), 1);
+                        updateUsers();
+                    }
+                }
+            })
+            nsfmCurrentColumn.append(tile);
+            nsfmTileCount++;
+        }
+        function AddTileToContent(url, length) {
+
+            if (tileCount % Math.floor(length / 5) == 0) {
+                currentColumn = document.createElement('div');
+                currentColumn.classList.add('content__column');
+                content.append(currentColumn);
+            }
+
+            let tile = document.createElement('div');
+            tile.classList.add('tile');
+            let img = document.createElement('img');
+            let like = document.createElement('div');
+            like.classList.add('like');
+            let text = document.createElement('div');
+            text.classList.add('text');
+            let BigPic = document.createElement('button');
+            BigPic.addEventListener('click', () => {
+                imgBigPic.src = url;
+                modalBigPic.style.display = 'flex';
+            })
+            BigPic.textContent = '⇄';
+            img.src = url;
+            text.textContent = '🖤';
+            like.append(text);
+            like.append(BigPic);
+            tile.append(img);
+            tile.append(like);
+            text.addEventListener('click', () => {
+                if (text.textContent == '🖤') {
+                    text.textContent = '💖';
+                    if (isAuthorized()) {
+                        currentUser.likes.push(url);
+                        updateUsers();
+                    }
+                } else {
+                    text.textContent = '🖤';
+                    if (isAuthorized()) {
+                        currentUser.likes.splice(currentUser.likes.indexOf(url), 1);
+                        updateUsers();
+                    }
+                }
+            })
+            currentColumn.append(tile);
+            tileCount++;
+        }
+        function isAuthorized() {
+            if (currentUser) return true;
+            return false;
+        }
+        function initProfile() {
+            if (isAuthorized()) {
+                user.textContent = currentUser.username;
+                quit.style.display = 'block';
+            } else {
+                user.textContent = 'You are not authorized...';
+                quit.style.display = 'none';
+            }
+        }
+
+        function initNsfmSetting() {
+            if (isAuthorized()) {
+                if (currentUser.isNsfm) {
+                    nsfmSearch.style.display = 'flex';
+                } else {
+                    nsfmSearch.style.display = 'none';
+                }
+            } else {
+                nsfmSearch.style.display = 'none';
+            }
+        }
+
+        function updateUsers() {
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            let users = JSON.parse(localStorage.getItem('users'));
+            for (let u of users) {
+                if (u.username == currentUser.username) {
+                    u.likes = currentUser.likes;
+                    u.nsfmLikes = currentUser.nsfmLikes;
+                    break;
+                }
+            }
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        function reloadContent(length = 25) {
+            let allContent = document.querySelectorAll('.content__column');
+            for (let column of allContent) {
+                column.remove();
+            }
+            tileCount = 0;
+            if (selected.length) {
+                postByTags(length);
+            } else {
+                postRandomPic(length);
+            }
+        }
+        function reloadNsfmContent(length = 25) {
+            let allNsfmContent = document.querySelectorAll('.content__nsfmColumn');
+            for (let colum of allNsfmContent) {
+                colum.remove();
+            }
+            nsfmTileCount = 0;
+            if (nsfmSelected.length) {
+                postByNsfmTags(length);
+            } else {
+                postRandomNsfmPic(length);
+            }
+        }
+        function initNsfmPics() {
+            if (isAuthorized()) {
+                if (currentUser.isNsfm) {
+                    postRandomNsfmPic();
+                }
+            }
+        }
+    </script>
+
+    <script>
+        // code...
+        initProfile();
+        initNsfmSetting();
+        postRandomPic();
+        initNsfmPics();
+    </script>
+</body>
+
+</html>

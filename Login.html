@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏵 Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="Authorization.css">
+</head>
+
+<body>
+    <form>
+        <div class="title">Login</div>
+        <input type="text" placeholder="username..." id="username">
+        <input type="password" placeholder="password..." id="password">
+        <button class="login">Login</button>
+        <p>Don't have an account? <a href="Registration.html">Signup</a></p>
+        <a href="index.html">Back to site</a>
+    </form>
+
+    <script>
+        let username = document.querySelector('#username');
+        let password = document.querySelector('#password');
+        let button = document.querySelector('button');
+    </script>
+
+    <script>
+        button.addEventListener('click', (e)=>{
+            e.preventDefault();
+            try{
+                if(!username.value) throw 'username input is empty';
+                if(!password.value) throw 'password input is empty';
+                let users = JSON.parse(localStorage.getItem('users'));
+                if(!users) throw 'no users are currently registered';
+                users.forEach(user =>{
+                    if(user.username == username.value && user.password == password.value){
+                        localStorage.setItem('currentUser', JSON.stringify(user));
+                        location.href = 'index.html';
+                    }
+                })
+                throw 'no such user';
+            }catch(ex){
+                alert(ex);
+            }
+        })
+    </script>
+</body>
+
+</html>

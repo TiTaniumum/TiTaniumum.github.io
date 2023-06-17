@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏵 Profile</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <p class="title"><a href="index.html">My Best Pics</a></p>
+        <div class="header__buttons">
+            <div class="user">Your profile </div>
+            <button id="home">Home</button>
+        </div>
+        <style>
+            .title {
+                width: 80%;
+            }
+        </style>
+    </header>
+
+    <style>
+        .profile {
+            display: flex;
+            flex-direction: row;
+            height: 300px;
+            border-bottom: 2px solid gold;
+            align-items: center;
+            justify-content: center;
+            gap: 50px;
+        }
+
+        .icon {
+            height: 100px;
+            width: 100px;
+            border: 2px solid gold;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 70px;
+            position: relative;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0px 0px 20px 1px rgba(255, 217, 0, 0.497);
+        }
+
+        .icon .like {
+            border-radius: 50px;
+        }
+
+        .icon:hover .like {
+            transition: 0.3s;
+            opacity: 1;
+        }
+
+        .modal--AskAvatar {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.25);
+            align-items: center;
+            justify-content: center;
+            z-index: 3;
+            gap: 50px;
+        }
+
+        .modal--AskAvatar button {
+            background: rgba(0, 0, 0, 0.738);
+            box-shadow: 0px 0px 20px 1px gold;
+        }
+
+        .modal--AskAvatar input {
+            border: 1px solid gold;
+            width: 30%;
+            height: 50px;
+            border-radius: 30px;
+            background: rgba(0, 0, 0, 0.789);
+            color: gold;
+            padding-left: 20px;
+            padding-right: 20px;
+            box-shadow: 0px 0px 20px 1px gold;
+            font-family: 'Amatic SC', cursive;
+            font-size: 25px;
+        }
+
+        .modal--AskAvatar input:focus {
+            outline: none;
+        }
+
+        .modal--AskAvatar input:active {
+            border: 3px solid gold;
+
+        }
+
+        .noLikes {
+            transition: 1s;
+            display: flex;
+            width: 100%;
+            height: 300px;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 60px;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 140px;
+            background-color: #000000b5;
+            border: 1px solid gold;
+            color: gold;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 120%;
+            left: 50%;
+            margin-left: -70px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            transition: 1s;
+        }
+
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: gold transparent transparent transparent;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .settings{
+            justify-content: center;
+        }
+
+        .nsfmSwitch{
+            width: 200px;
+            height: 100px;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            transition: 1s;
+            font-size: 30px;
+            font-weight: 800;
+        }
+        .nsfmSwitch:hover{
+            box-shadow: 0px 0px 10px 1px gold;
+        }
+
+        .nsfmText{
+            background: none;
+            color: rgba(255, 217, 0, 0);
+            padding: 10px;
+            border-radius: 10px;
+            transition: 1s;
+        }
+        .nsfmText:hover{
+            background: rgba(0, 0, 0, 0.732);
+            color: gold;
+        }
+    </style>
+
+    <div class="profile">
+        <div class="icon">
+            <p id="emptyAvatar">🕵</p>
+            <div class="like">⛶</div>
+        </div>
+        <p id="username">Temirlan</p>
+        <p id="likeCount">Likes: 100</p>
+        <button id="quit">unsign</button>
+        <button id="settings">🛠</button>
+    </div>
+
+    <div class="settings">
+        <button class="nsfmSwitch"><p class="nsfmText">Allow NSFW?</p></button>
+    </div>
+
+    <div class="noLikes">You currently don't have any liked pictures....</div>
+
+    <div class="content">
+    </div>
+
+    <div class="content" id="nsfmContent">
+    </div>
+
+    <div class="modal--AskAvatar">
+        <input type="text" id="AvatarUrl" placeholder="place url of picture here...">
+        <button id="save">save</button>
+        <button id="cancel">cancel</button>
+    </div>
+
+    <div class="modal--BigPic">
+        <img src="" alt="" id="BigPic">
+    </div>
+
+    <script>
+        let home = document.querySelector('#home');
+        let username = document.querySelector('#username');
+        let likeCount = document.querySelector('#likeCount');
+        let content = document.querySelector('.content');
+        let quit = document.querySelector('#quit');
+        let avatar = document.querySelector('.icon');
+        let emptyAvatar = document.querySelector('#emptyAvatar');
+        let modalAskAvatar = document.querySelector('.modal--AskAvatar');
+        let inputAvatarUrl = document.querySelector('#AvatarUrl');
+        let modalSave = document.querySelector('#save');
+        let noLikes = document.querySelector('.noLikes');
+        let settings = document.querySelector('#settings');
+        let settingsDiv = document.querySelector('.settings');
+        let nsfmSwitch = document.querySelector('.nsfmSwitch');
+        let nsfmText = document.querySelector('.nsfmText');
+        let modalCancel = document.querySelector('#cancel');
+        let nsfmContent = document.querySelector('#nsfmContent');
+        let modalBigPic = document.querySelector('.modal--BigPic');
+        let imgBigPic = document.querySelector('#BigPic');
+
+        let curretnUser = JSON.parse(localStorage.getItem('currentUser'));
+        let categories = ['waifu', 'neko', 'shinobu', 'megumin', 'bully', 'cuddle', 'cry', 'hug', 'awooo', 'kiss', 'lick', 'pat', 'smug', 'bonk',
+            'yeet', 'blush', 'smile', 'wave', 'highfive', 'handhold', 'nom', 'bite', 'glomp', 'slap', 'kill', 'kick', 'happy', 'wink', 'poke',
+            'dance', 'cringe'];
+        let tileCount = 0;
+        let nsfmTileCount = 0;
+        let currentColumn;
+        let currentNsfmColumn;
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    </script>
+
+    <script>
+        //events...
+        modalBigPic.addEventListener('click', ()=>{
+            modalBigPic.style.display = 'none';
+        });
+        nsfmSwitch.addEventListener('click', ()=>{
+            if(nsfmSwitch.style.backgroundImage == 'url("https://openclipart.org/image/2000px/215664")'){
+                nsfmSwitch.style.backgroundImage = `url(https://media.tenor.com/P-DAoOO8gu0AAAAd/oh-yeah-computer.gif)`;
+                nsfmText.textContent = 'Disable NSFW?';
+                currentUser.isNsfm = true;
+                updateUsers();
+                postNsfmLiked();
+                initProfile();
+            }else{
+                nsfmSwitch.style.backgroundImage = `url("https://openclipart.org/image/2000px/215664")`;
+                nsfmText.textContent = 'Allow NSFW?';
+                currentUser.isNsfm = false;
+                updateUsers();
+                removeNsfmContent();
+                initProfile();
+            }
+        })
+        home.addEventListener('click', () => {
+            location.href = 'index.html';
+        });
+        quit.addEventListener('click', () => {
+            if (confirm('are you sure that you wanna quit your profile?')) {
+                currentUser = null;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                location.href = 'index.html';
+            }
+        });
+        avatar.addEventListener('click', () => {
+            modalAskAvatar.style.display = "flex";
+        });
+        modalSave.addEventListener('click', () => {
+            if (inputAvatarUrl.value == '') {
+                avatar.style.backgroundImage = `none`;
+                emptyAvatar.textContent = '🕵';
+                currentUser.avatar = '';
+                updateUsers();
+            } else {
+                avatar.style.backgroundImage = `url(${inputAvatarUrl.value})`;
+                emptyAvatar.textContent = '';
+                currentUser.avatar = inputAvatarUrl.value == '' ? 'none' : inputAvatarUrl.value;
+                updateUsers();
+            }
+            modalAskAvatar.style.display = 'none';
+        });
+        modalCancel.addEventListener('click', ()=>{
+            modalAskAvatar.style.display = 'none';
+        })
+        settings.addEventListener('click', () => {
+            if (settingsDiv.style.height == '150px') {
+                settingsDiv.style.height = '0px';
+            } else {
+                settingsDiv.style.height = '150px';
+            }
+        });
+    </script>
+
+    <script>
+        //functions...
+        function postLikedPics() {
+            for (let i = 0; i < currentUser.likes.length; i++) {
+                AddTileToContent(currentUser.likes[i]);
+            }
+        }
+        function AddTileToContent(url) {
+
+            if (tileCount % Math.floor(currentUser.likes.length / 5 + 1) == 0) {
+                currentColumn = document.createElement('div');
+                currentColumn.classList.add('content__column');
+                content.append(currentColumn);
+            }
+
+            let tile = document.createElement('div');
+            tile.classList.add('tile');
+            let img = document.createElement('img');
+            let like = document.createElement('div');
+            like.classList.add('like');
+            let text = document.createElement('div');
+            text.classList.add('text');
+            let tooltip = document.createElement('div');
+            tooltip.classList.add('tooltip');
+            let copy = document.createElement('button');
+            let p = document.createElement('p');
+            p.textContent = '❏';
+            let span = document.createElement('span');
+            span.classList.add('tooltiptext');
+            span.textContent = 'Copy to buffer';
+            copy.append(span);
+            copy.append(p);
+            copy.addEventListener('click', () => {
+                navigator.clipboard.writeText(url);
+                span.textContent = "Copied";
+            })
+            let BigPic = document.createElement('button');
+            BigPic.addEventListener('click',()=>{
+                imgBigPic.src = url;
+                modalBigPic.style.display = 'flex';
+            })
+            BigPic.textContent = '⇄';
+            tooltip.append(copy);
+            img.src = url;
+            text.textContent = '💖';
+            like.append(text);
+            like.append(tooltip);
+            like.append(BigPic);
+            tile.append(img);
+            tile.append(like);
+            text.addEventListener('click', () => {
+                if (text.textContent == '🖤') {
+                    text.textContent = '💖';
+                    if (isAuthorized()) {
+                        currentUser.likes.push(url);
+                        updateUsers();
+                    }
+                } else {
+                    text.textContent = '🖤';
+                    if (isAuthorized()) {
+                        currentUser.likes.splice(currentUser.likes.indexOf(url), 1);
+                        updateUsers();
+                    }
+                }
+            })
+            currentColumn.append(tile);
+            tileCount++;
+        }
+        function isAuthorized() {
+            if (currentUser) return true;
+            return false;
+        }
+
+        function updateUsers() {
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            let users = JSON.parse(localStorage.getItem('users'));
+            for (let u of users) {
+                if (u.username == currentUser.username) {
+                    u.likes = currentUser.likes;
+                    u.avatar = currentUser.avatar;
+                    u.isNsfm = currentUser.isNsfm;
+                    u.nsfmLikes = currentUser.nsfmLikes;
+                    break;
+                }
+            }
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        function initAvatar() {
+            console.log(currentUser.avatar);
+            if (currentUser.avatar != 'none' && currentUser.avatar != '') {
+                avatar.style.backgroundImage = `url(${currentUser.avatar})`;
+                emptyAvatar.textContent = '';
+            }
+        }
+
+        function initEmptyness() {
+            if (currentUser.likes.length) {
+                noLikes.style.display = 'none';
+            }
+        }
+
+        function initNsfmSwitch(){
+            if(curretnUser.isNsfm){
+                nsfmSwitch.style.backgroundImage = `url(https://media.tenor.com/P-DAoOO8gu0AAAAd/oh-yeah-computer.gif)`;
+            }else{
+                nsfmSwitch.style.backgroundImage =`url(https://openclipart.org/image/2000px/215664)`;
+            }
+        }
+
+        function postNsfmLiked(){
+            for(let i=0; i< currentUser.nsfmLikes.length ; i++){
+                AddTileToNsfmContent(currentUser.nsfmLikes[i]);
+            }
+        }
+
+        function AddTileToNsfmContent(url) {
+            if (nsfmTileCount % Math.floor(currentUser.nsfmLikes.length / 5 + 1) == 0) {
+                currentNsfmColumn = document.createElement('div');
+                currentNsfmColumn.classList.add('content__nsfmColumn');
+                nsfmContent.append(currentNsfmColumn);
+            }
+            let tile = document.createElement('div');
+            tile.classList.add('tile');
+            let img = document.createElement('img');
+            let like = document.createElement('div');
+            like.classList.add('like');
+            let text = document.createElement('div');
+            text.classList.add('text');
+            let tooltip = document.createElement('div');
+            tooltip.classList.add('tooltip');
+            let copy = document.createElement('button');
+            let p = document.createElement('p');
+            p.textContent = '❏';
+            let span = document.createElement('span');
+            span.classList.add('tooltiptext');
+            span.textContent = 'Copy to buffer';
+            copy.append(span);
+            copy.append(p);
+            copy.addEventListener('click', () => {
+                navigator.clipboard.writeText(url);
+                span.textContent = "Copied";
+            })
+            let BigPic = document.createElement('button');
+            BigPic.addEventListener('click',()=>{
+                imgBigPic.src = url;
+                modalBigPic.style.display = 'flex';
+            })
+            BigPic.textContent = '⇄';
+            tooltip.append(copy);
+            img.src = url;
+            text.textContent = '💖';
+            like.append(text);
+            like.append(tooltip);
+            like.append(BigPic);
+            tile.append(img);
+            tile.append(like);
+            text.addEventListener('click', () => {
+                if (text.textContent == '🖤') {
+                    text.textContent = '💖';
+                    if (isAuthorized()) {
+                        currentUser.nsfmLikes.push(url);
+                        updateUsers();
+                    }
+                } else {
+                    text.textContent = '🖤';
+                    if (isAuthorized()) {
+                        currentUser.nsfmLikes.splice(currentUser.nsfmLikes.indexOf(url), 1);
+                        updateUsers();
+                    }
+                }
+            })
+            currentNsfmColumn.append(tile);
+            nsfmTileCount++;
+        }
+        function removeNsfmContent(){
+            let allNsfmContent = document.querySelectorAll('.content__nsfmColumn');
+            for(let colum of allNsfmContent){
+                colum.remove();
+            }
+            nsfmTileCount = 0;
+        }
+
+        function initProfile(){
+            username.textContent = currentUser.username;
+            likeCount.textContent = `Likes: ${currentUser.isNsfm ? currentUser.likes.length+ currentUser.nsfmLikes.length : currentUser.likes.length}`;
+        }
+    </script>
+
+    <script>
+        //code...
+        initProfile();
+        initEmptyness();
+        initAvatar();
+        initNsfmSwitch();
+        postLikedPics();
+        if(currentUser.isNsfm){
+            postNsfmLiked();
+        }
+    </script>
+</body>
+
+</html>

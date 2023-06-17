@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏵 Registration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="Authorization.css">
+</head>
+
+<body>
+    <form>
+        <div class="title">Registration</div>
+        <input type="text" placeholder="username..." id="username">
+        <input type="password" placeholder="password..." id="password">
+        <button class="login">Signup</button>
+        <p>Already have an account? <a href="Login.html">Login</a></p>
+        <a href="index.html">Back to site</a>
+    </form>
+
+    <script>
+        let username = document.querySelector('#username');
+        let password = document.querySelector('#password');
+        let button = document.querySelector('button');
+        const usernameRegex = /^(?=.[a-zA-Z0-9]).{5,}$/;
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+        let users = JSON.parse(localStorage.getItem('users'));
+    </script>
+
+    <script>
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            try {
+                if (!username.value) throw 'username input is empty';
+                if (!password.value) throw 'password input is empty';
+                if (!usernameRegex.test(username.value)) throw 'username is incorrect';
+                if (!passwordRegex.test(password.value)) throw 'passowrd is incorrect';
+                if (isExist({ 'username': username.value, 'password': password.value })) throw 'such user exists';
+                users.push({ 'username': username.value, 'password': password.value, 'likes': [],'nsfmLikes':[],'isNsfm': false, 'avatar' : 'none' });
+                console.log(users);
+                localStorage.setItem('users', JSON.stringify(users));
+                location.href = 'Login.html';
+            } catch (ex) {
+                console.log(password.value);
+                console.log(ex);
+            }
+        })
+    </script>
+
+    <script>
+        function isExist(user) {
+            if (!users.length) return false;
+            for (let u of users) if (u.username == user.username) return true;
+            return false;
+        }
+    </script>
+
+    <script>
+        if (!users) users = [];
+        console.log(users);
+    </script>
+</body>
+
+</html>
