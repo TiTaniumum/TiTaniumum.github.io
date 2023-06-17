@@ -200,7 +200,9 @@
         reload.addEventListener('click', () => {
             reloadContent();
             if(isAuthorized()){
-                reloadNsfmContent();
+                if(currentUser.isNsfm){
+                    reloadNsfmContent();
+                }
             }
         });
         search.addEventListener('click', () => {
