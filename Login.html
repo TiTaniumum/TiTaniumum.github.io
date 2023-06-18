@@ -33,6 +33,7 @@
         button.addEventListener('click', (e)=>{
             e.preventDefault();
             try{
+                let isLogged = false;
                 if(!username.value) throw 'username input is empty';
                 if(!password.value) throw 'password input is empty';
                 let users = JSON.parse(localStorage.getItem('users'));
@@ -40,9 +41,11 @@
                 users.forEach(user =>{
                     if(user.username == username.value && user.password == password.value){
                         localStorage.setItem('currentUser', JSON.stringify(user));
+                        isLogged = true;
                         location.href = 'index.html';
                     }
                 })
+                if(!isLogged)
                 throw 'no such user';
             }catch(ex){
                 alert(ex);
