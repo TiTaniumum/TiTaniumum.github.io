@@ -11,13 +11,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="Authorization.css">
+    <style>
+        form p{
+            padding-left:25px;
+            padding-right: 25px;
+        }
+    </style>
 </head>
 
 <body>
     <form>
         <div class="title">Registration</div>
-        <input type="text" placeholder="username..." id="username">
-        <input type="password" placeholder="password..." id="password">
+        <input type="text" placeholder="username... Example: Lloyd" id="username">
+        <p>5 symbols</p>
+        <input type="password" placeholder="password... Example: 123456Aa" id="password">
+        <p>8 symbols (letters lower, upper case, digits)</p>
         <button class="login">Signup</button>
         <p>Already have an account? <a href="Login.html">Login</a></p>
         <a href="index.html">Back to site</a>
@@ -46,7 +54,7 @@
                 localStorage.setItem('users', JSON.stringify(users));
                 location.href = 'Login.html';
             } catch (ex) {
-                alert.log(ex);
+                alert(ex);
             }
         })
     </script>
